@@ -17,7 +17,7 @@ const gallery = [
     sub: "Automatikával, Győr",
   },
   {
-    src: "https://images.unsplash.com/photo-1572297870735-3a4a3a6f0f3a?q=80&w=900&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=900&auto=format&fit=crop",
     title: "Kovácsoltvas kerítés",
     sub: "Villaövezet, Pécs",
   },
