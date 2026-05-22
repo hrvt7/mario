@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
-  --red: #C1121F;
-  --red-light: #E63946;
-  --red-dark: #780000;
-  --cream: #FDF0D5;
-  --charcoal: #1a1a1a;
-  --paper: #FAFAF7;
+  --background: #fafaf9;
+  --foreground: #18181b;
+  --ink: #18181b;
+  --steel: #52525b;
+  --amber: #E8930C;
+  --amber-dark: #B8730A;
+  --line: #e7e5e4;
+  --panel: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-red: var(--red);
-  --color-red-light: var(--red-light);
-  --color-red-dark: var(--red-dark);
-  --color-cream: var(--cream);
-  --color-charcoal: var(--charcoal);
-  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-steel: var(--steel);
+  --color-amber: var(--amber);
+  --color-amber-dark: var(--amber-dark);
+  --color-line: var(--line);
+  --color-panel: var(--panel);
   --font-sans: var(--font-inter);
   --font-display: var(--font-display);
 }
@@ -32,39 +32,20 @@ body {
 }
 
 h1, h2, h3, h4, .display {
-  font-family: var(--font-display), "Impact", system-ui, sans-serif;
-  letter-spacing: 0.01em;
-  font-weight: 400;
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  font-weight: 700;
 }
 
-.brand-gradient {
-  background: linear-gradient(135deg, #780000 0%, #C1121F 60%, #E63946 100%);
+.amber-gradient {
+  background: linear-gradient(135deg, #E8930C 0%, #F5A623 100%);
 }
 
-.brand-text-gradient {
-  background: linear-gradient(135deg, #780000 0%, #C1121F 50%, #E63946 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-}
-
-.butcher-stripe {
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(193, 18, 31, 0.08),
-    rgba(193, 18, 31, 0.08) 10px,
-    transparent 10px,
-    transparent 20px
-  );
-}
-
-.paper-texture {
-  background-color: #FDF0D5;
+.grid-texture {
   background-image:
-    radial-gradient(circle at 25% 25%, rgba(0,0,0,0.03) 1px, transparent 1px),
-    radial-gradient(circle at 75% 75%, rgba(0,0,0,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
 @keyframes fadeUp {
@@ -81,6 +62,6 @@ html {
 }
 
 ::selection {
-  background: #C1121F;
-  color: white;
+  background: var(--amber);
+  color: #18181b;
 }

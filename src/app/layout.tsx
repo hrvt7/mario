@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Bebas_Neue } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -7,31 +7,30 @@ const inter = Inter({
   subsets: ["latin", "latin-ext"],
 });
 
-const display = Bebas_Neue({
+const display = Space_Grotesk({
   variable: "--font-display",
-  weight: "400",
+  weight: ["500", "600", "700"],
   subsets: ["latin", "latin-ext"],
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://stefri.vercel.app"),
-  title: "Stefri — Minőségi húskészítmények Ausztriából | Házhozszállítás",
+  metadataBase: new URL("https://mario.vercel.app"),
+  title: "MÁRIÓ — Kerítésépítés & Csúszókapuk | Profi kivitelezés",
   description:
-    "Prémium ausztriai felvágottak, virslik, szalámik, sajtok és gyorsfagyasztott termékek. Mozgó boltunk közel 100 településre szállít. +36 20 450 9387",
+    "Kerítésépítés, csúszókapuk és nyílókapuk profi kivitelezésben. Táblás, drótfonatos és kovácsoltvas kerítések. Online árkalkulátor — kérjen azonnali árajánlatot!",
   keywords: [
-    "osztrák felvágott",
-    "minőségi húskészítmények",
-    "mozgó bolt",
-    "házhozszállítás",
-    "prémium hús",
-    "virsli",
-    "szalámi",
-    "stefri",
+    "kerítésépítés",
+    "csúszókapu",
+    "nyílókapu",
+    "táblás kerítés",
+    "drótfonatos kerítés",
+    "kovácsoltvas kerítés",
+    "kapuautomatika",
   ],
   openGraph: {
-    title: "Stefri — Minőségi húskészítmények Ausztriából",
+    title: "MÁRIÓ — Kerítésépítés & Csúszókapuk",
     description:
-      "Heti két alkalommal közvetlenül a gyártótól. Mozgó boltunk házhoz viszi a legjobb felvágottakat.",
+      "Profi kerítés- és kapukivitelezés. Számolja ki online a várható árat néhány kattintással.",
     type: "website",
     locale: "hu_HU",
   },
@@ -48,23 +47,18 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Store",
-              name: "Stefri — Minőségi húskészítmények Ausztriából",
+              "@type": "GeneralContractor",
+              name: "MÁRIÓ Kerítésépítés",
               description:
-                "Prémium osztrák húskészítmények, mozgó bolt szolgáltatással közel 100 településen.",
-              telephone: "+36 20 450 9387",
-              email: "minosegifelvagottak@gmail.com",
-              url: "https://stefri.vercel.app",
-              sameAs: ["https://www.facebook.com/felvagott"],
-              address: {
-                "@type": "PostalAddress",
-                addressCountry: "HU",
-              },
+                "Kerítésépítés, csúszókapuk és nyílókapuk profi kivitelezésben.",
+              telephone: "+36 30 000 0000",
+              areaServed: "Magyarország",
+              url: "https://mario.vercel.app",
             }),
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-white">{children}</body>
+      <body className="min-h-full flex flex-col bg-background">{children}</body>
     </html>
   );
 }

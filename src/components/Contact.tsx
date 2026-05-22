@@ -1,110 +1,156 @@
-import { Mail, Phone, MessageCircle } from "lucide-react";
+"use client";
 
-function Facebook({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
-      <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/>
-    </svg>
-  );
-}
+import { useState } from "react";
+import { Phone, Mail, MapPin, Send, Check } from "lucide-react";
 
 export default function Contact() {
+  const [sent, setSent] = useState(false);
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // DEMÓ: valódi oldalon ez e-mailt küld vagy CRM-be ír.
+    setSent(true);
+    setTimeout(() => setSent(false), 4000);
+  };
+
   return (
-    <section id="kapcsolat" className="relative py-24 bg-paper">
+    <section id="kapcsolat" className="relative py-24 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red/10 text-red-dark text-xs font-bold uppercase tracking-widest mb-4">
-            Kapcsolat
+        <div className="grid lg:grid-cols-2 gap-12">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber/15 text-amber-dark text-xs font-semibold uppercase tracking-wide mb-4">
+              Kapcsolat
+            </div>
+            <h2 className="display text-4xl md:text-5xl text-ink leading-tight">
+              Kérjen ingyenes felmérést
+            </h2>
+            <p className="mt-4 text-lg text-steel">
+              Hagyja meg adatait, és 24 órán belül felvesszük Önnel a
+              kapcsolatot egy ingyenes helyszíni felmérés egyeztetéséhez.
+            </p>
+
+            <div className="mt-8 space-y-3">
+              <a
+                href="tel:+36300000000"
+                className="flex items-center gap-4 p-4 rounded-xl border border-line hover:border-ink transition-colors"
+              >
+                <div className="w-11 h-11 rounded-lg bg-stone-100 flex items-center justify-center">
+                  <Phone className="w-5 h-5 text-ink" />
+                </div>
+                <div>
+                  <div className="text-xs text-steel">Telefon</div>
+                  <div className="font-semibold text-ink">+36 30 000 0000</div>
+                </div>
+              </a>
+              <a
+                href="mailto:info@mario-kerites.hu"
+                className="flex items-center gap-4 p-4 rounded-xl border border-line hover:border-ink transition-colors"
+              >
+                <div className="w-11 h-11 rounded-lg bg-stone-100 flex items-center justify-center">
+                  <Mail className="w-5 h-5 text-ink" />
+                </div>
+                <div>
+                  <div className="text-xs text-steel">E-mail</div>
+                  <div className="font-semibold text-ink">info@mario-kerites.hu</div>
+                </div>
+              </a>
+              <div className="flex items-center gap-4 p-4 rounded-xl border border-line">
+                <div className="w-11 h-11 rounded-lg bg-stone-100 flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-ink" />
+                </div>
+                <div>
+                  <div className="text-xs text-steel">Munkaterület</div>
+                  <div className="font-semibold text-ink">
+                    Magyarország egész területe
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <h2 className="display text-5xl md:text-6xl text-charcoal leading-tight">
-            Vegye fel velünk a{" "}
-            <span className="brand-text-gradient">kapcsolatot</span>
-          </h2>
-          <p className="mt-4 text-lg text-zinc-600">
-            Kérdése van, rendelni szeretne, vagy érdekli, mikor érkezünk az Ön
-            településére? Keressen bennünket bátran!
-          </p>
-        </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          <a
-            href="tel:+36204509387"
-            className="group p-8 rounded-3xl bg-white border-2 border-transparent hover:border-red/30 hover:shadow-2xl hover:shadow-red/10 transition-all"
+          <form
+            onSubmit={onSubmit}
+            className="bg-stone-50 border border-line rounded-2xl p-6 sm:p-8"
           >
-            <div className="w-14 h-14 rounded-2xl brand-gradient flex items-center justify-center mb-5 shadow-lg shadow-red/30 group-hover:scale-110 transition-transform">
-              <Phone className="w-7 h-7 text-white" />
+            <div className="grid sm:grid-cols-2 gap-4">
+              <Field label="Név" placeholder="Teljes név" required />
+              <Field label="Telefonszám" placeholder="+36 30 …" required />
             </div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-red mb-2">
-              Telefon
+            <div className="mt-4">
+              <Field label="E-mail" placeholder="pelda@email.hu" type="email" />
             </div>
-            <div className="display text-3xl text-charcoal tracking-wide">
-              +36 20 450 9387
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-ink mb-1.5">
+                Melyik szolgáltatás érdekli?
+              </label>
+              <select className="w-full px-4 py-3 rounded-lg border border-line bg-white text-ink text-sm focus:border-amber outline-none">
+                <option>Táblás kerítés</option>
+                <option>Drótfonatos kerítés</option>
+                <option>Kovácsoltvas kerítés</option>
+                <option>Csúszókapu</option>
+                <option>Nyílókapu</option>
+                <option>Kapuautomatika</option>
+                <option>Egyéb / nem tudom</option>
+              </select>
             </div>
-            <p className="mt-2 text-sm text-zinc-600">
-              Hívjon bennünket rendeléssel kapcsolatban
-            </p>
-          </a>
-
-          <a
-            href="mailto:minosegifelvagottak@gmail.com"
-            className="group p-8 rounded-3xl bg-white border-2 border-transparent hover:border-red/30 hover:shadow-2xl hover:shadow-red/10 transition-all"
-          >
-            <div className="w-14 h-14 rounded-2xl brand-gradient flex items-center justify-center mb-5 shadow-lg shadow-red/30 group-hover:scale-110 transition-transform">
-              <Mail className="w-7 h-7 text-white" />
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-ink mb-1.5">
+                Üzenet
+              </label>
+              <textarea
+                rows={4}
+                placeholder="Írja le röviden, mire lenne szüksége…"
+                className="w-full px-4 py-3 rounded-lg border border-line bg-white text-ink text-sm focus:border-amber outline-none resize-none"
+              />
             </div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-red mb-2">
-              Email
-            </div>
-            <div className="display text-xl text-charcoal tracking-wide break-all">
-              minosegifelvagottak<br />@gmail.com
-            </div>
-            <p className="mt-2 text-sm text-zinc-600">
-              Írjon, hogy válaszolhassunk
-            </p>
-          </a>
-
-          <a
-            href="https://www.facebook.com/felvagott"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group p-8 rounded-3xl bg-white border-2 border-transparent hover:border-red/30 hover:shadow-2xl hover:shadow-red/10 transition-all"
-          >
-            <div className="w-14 h-14 rounded-2xl brand-gradient flex items-center justify-center mb-5 shadow-lg shadow-red/30 group-hover:scale-110 transition-transform">
-              <Facebook className="w-7 h-7 text-white" />
-            </div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-red mb-2">
-              Facebook
-            </div>
-            <div className="display text-3xl text-charcoal tracking-wide">
-              @felvagott
-            </div>
-            <p className="mt-2 text-sm text-zinc-600">
-              Heti akciók, újdonságok, nyereményjátékok
-            </p>
-          </a>
-        </div>
-
-        <div className="mt-12 rounded-3xl overflow-hidden bg-gradient-to-br from-charcoal to-red-dark p-10 md:p-14 text-center text-white relative">
-          <div className="absolute inset-0 butcher-stripe opacity-20" />
-          <div className="relative">
-            <MessageCircle className="w-12 h-12 mx-auto mb-4 text-red-light" />
-            <h3 className="display text-3xl md:text-4xl tracking-wide">
-              Nem biztos, hogy szállítunk az Ön településére?
-            </h3>
-            <p className="mt-4 text-zinc-200 max-w-2xl mx-auto">
-              Hívjon bennünket, és megnézzük — közel 100 településre visszük
-              ki rendszeresen a friss árut.
-            </p>
-            <a
-              href="tel:+36204509387"
-              className="mt-8 inline-flex items-center gap-2 bg-white text-charcoal px-8 py-4 rounded-full text-base font-bold uppercase tracking-wide shadow-xl hover:scale-105 transition-all"
+            <button
+              type="submit"
+              className={`mt-5 w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-sm font-semibold transition-colors ${
+                sent ? "bg-green-600 text-white" : "amber-gradient text-ink"
+              }`}
             >
-              <Phone className="w-5 h-5" />
-              Hívjon most
-            </a>
-          </div>
+              {sent ? (
+                <>
+                  <Check className="w-4 h-4" /> Köszönjük, hamarosan keressük!
+                </>
+              ) : (
+                <>
+                  <Send className="w-4 h-4" /> Felmérést kérek
+                </>
+              )}
+            </button>
+            <p className="mt-3 text-xs text-steel text-center">
+              Az adatküldés demó funkció — éles oldalon e-mailre továbbítjuk.
+            </p>
+          </form>
         </div>
       </div>
     </section>
+  );
+}
+
+function Field({
+  label,
+  placeholder,
+  type = "text",
+  required,
+}: {
+  label: string;
+  placeholder: string;
+  type?: string;
+  required?: boolean;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-ink mb-1.5">
+        {label}
+      </label>
+      <input
+        type={type}
+        required={required}
+        placeholder={placeholder}
+        className="w-full px-4 py-3 rounded-lg border border-line bg-white text-ink text-sm focus:border-amber outline-none"
+      />
+    </div>
   );
 }
