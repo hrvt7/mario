@@ -169,7 +169,6 @@ html {
   will-change: transform, opacity;
   display: flex;
   align-items: stretch;
-  overflow: hidden;
 }
 .v2-hero-fence--left  { left: 0; justify-content: flex-end; }
 .v2-hero-fence--right { right: 0; justify-content: flex-start; }
@@ -358,8 +357,7 @@ html {
   position: sticky;
   border-radius: 16px;
   overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   min-height: clamp(240px, 30vw, 380px);
   border: 1px solid rgba(255,255,255,0.07);
   margin-bottom: 16px;
@@ -372,13 +370,7 @@ html {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(
-    to right,
-    rgba(12,10,9,0.88) 0%,
-    rgba(12,10,9,0.55) 40%,
-    rgba(12,10,9,0.20) 75%,
-    transparent 100%
-  );
+  background: radial-gradient(ellipse at 50% 50%, rgba(12,10,9,0.40) 0%, rgba(12,10,9,0.75) 100%);
   pointer-events: none;
   border-radius: 16px;
 }
@@ -402,11 +394,13 @@ html {
 .mk-svc-content {
   position: relative;
   z-index: 2;
-  grid-column: 1;
+  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: clamp(28px, 4vw, 52px);
+  text-align: center;
+  padding: clamp(28px, 4vw, 52px) clamp(28px, 8vw, 120px);
   color: #fff;
 }
 .mk-svc-title {
@@ -421,12 +415,13 @@ html {
   line-height: 1.65;
   color: rgba(255,255,255,0.65);
   margin: 0 0 20px;
-  max-width: 420px;
+  max-width: 520px;
 }
 .mk-svc-tags {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .mk-tag {
   display: inline-block;
@@ -591,12 +586,38 @@ html {
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0;
   cursor: pointer;
   z-index: 2;
   -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
 }
-/* actual thumb shown below bg rail via overlay — thumb is purely for interaction */
+.v2-range:focus { outline: none; }
+.v2-range::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 100%;
+}
+.v2-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 40px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #292524 0%, #18181b 100%);
+  border: 2px solid var(--color-amber);
+  box-shadow: 0 0 0 3px rgba(232,147,12,0.20), 0 6px 16px rgba(0,0,0,0.40);
+  cursor: grab;
+  margin-top: -18px;
+}
+.v2-range::-moz-range-track { background: transparent; }
+.v2-range::-moz-range-thumb {
+  width: 14px;
+  height: 40px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #292524 0%, #18181b 100%);
+  border: 2px solid var(--color-amber);
+  box-shadow: 0 0 0 3px rgba(232,147,12,0.20);
+  cursor: grab;
+}
 
 .v2-range-bounds {
   display: flex;
