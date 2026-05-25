@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,6 +11,13 @@ const display = Space_Grotesk({
   variable: "--font-display",
   weight: ["500", "600", "700"],
   subsets: ["latin", "latin-ext"],
+});
+
+const accent = Instrument_Serif({
+  variable: "--font-accent",
+  weight: "400",
+  style: ["normal", "italic"],
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -40,7 +47,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="hu" className={`${inter.variable} ${display.variable} h-full antialiased`}>
+    <html lang="hu" className={`${inter.variable} ${display.variable} ${accent.variable} h-full antialiased`}>
       <head>
         <script
           type="application/ld+json"

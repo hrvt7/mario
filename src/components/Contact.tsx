@@ -22,7 +22,9 @@ export default function Contact() {
               Kapcsolat
             </div>
             <h2 className="display text-4xl md:text-5xl text-ink leading-tight">
-              Kérjen ingyenes felmérést
+              Kérjen{" "}
+              <em className="not-italic" style={{ color: "#E8930C" }}>ingyenes</em>{" "}
+              felmérést
             </h2>
             <p className="mt-4 text-lg text-steel">
               Hagyja meg adatait, és 24 órán belül felvesszük Önnel a

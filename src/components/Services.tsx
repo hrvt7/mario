@@ -1,181 +1,232 @@
-import { Fence, DoorOpen, Cpu, Hammer, Grid3x3, Ruler } from "lucide-react";
+import React from "react";
 
-const services = [
+// SVG art components — unique illustration per service
+
+function PanelArt() {
+  const railLeft = 50, railWidth = 500;
+  const barW = 12, numBars = 17, gap = 18;
+  const span = numBars * barW + (numBars - 1) * gap;
+  const edgePad = (railWidth - span) / 2;
+  const bars = Array.from({ length: numBars }, (_, i) => {
+    const x = railLeft + edgePad + i * (barW + gap);
+    return <rect key={i} x={x} y={102} width={barW} height={276} rx={3} />;
+  });
+  return (
+    <svg viewBox="0 0 600 480" preserveAspectRatio="xMaxYMid slice" className="mk-svc-art-svg" aria-hidden="true">
+      <rect x={railLeft} y={84}  width={railWidth} height={14} rx={3} />
+      {bars}
+      <rect x={railLeft} y={386} width={railWidth} height={18} rx={3} />
+    </svg>
+  );
+}
+
+function MeshArt() {
+  const meshLeft = 38, meshRight = 562;
+  const meshTop  = 44, meshBot   = 424;
+  const dx = 28, dy = 14, half = 14;
+
+  const dots: React.ReactNode[] = [];
+  for (let r = 0; meshTop + r * dy + 28 <= meshBot; r++) {
+    const y = meshTop + r * dy;
+    const offset = (r % 2) * half;
+    for (let c = 0; ; c++) {
+      const x = meshLeft + c * dx + offset + half;
+      if (x + half > meshRight) break;
+      if (x - half < meshLeft)  continue;
+      dots.push(
+        <path key={`${r}-${c}`} d={`M${x},${y} l14,14 l-14,14 l-14,-14 z`} fill="none" strokeWidth="1.6" />
+      );
+    }
+  }
+
+  return (
+    <svg viewBox="0 0 600 480" preserveAspectRatio="xMaxYMid slice" className="mk-svc-art-svg" aria-hidden="true">
+      <rect x={20}  y={32}  width={560} height={6} />
+      <rect x={20}  y={436} width={560} height={6} />
+      <rect x={20}  y={20} width={12} height={430} />
+      <rect x={568} y={20} width={12} height={430} />
+      {dots}
+    </svg>
+  );
+}
+
+function IronArt() {
+  const bars: React.ReactNode[] = [];
+  for (let i = 0; i < 11; i++) {
+    const x = 70 + i * 46;
+    bars.push(
+      <g key={i}>
+        <path d={`M${x},50 l-9,18 l18,0 z`} />
+        <rect x={x - 3} y={64} width="6" height="320" rx="1" />
+        <circle cx={x} cy={220} r="9" fill="none" strokeWidth="2.2" />
+      </g>
+    );
+  }
+  return (
+    <svg viewBox="0 0 600 480" preserveAspectRatio="xMaxYMid slice" className="mk-svc-art-svg" aria-hidden="true">
+      <rect x="20" y="120" width="560" height="6" />
+      <rect x="20" y="380" width="560" height="10" rx="2" />
+      {bars}
+      {Array.from({ length: 10 }).map((_, i) => (
+        <path
+          key={`c${i}`}
+          d={`M${90 + i * 46},126 q12,18 0,32 q-12,14 0,28`}
+          fill="none"
+          strokeWidth="2"
+        />
+      ))}
+    </svg>
+  );
+}
+
+function SlidingGateArt() {
+  return (
+    <svg viewBox="0 0 600 480" preserveAspectRatio="xMaxYMid slice" className="mk-svc-art-svg" aria-hidden="true">
+      <rect x="0" y="80" width="600" height="6" />
+      <rect x="0" y="400" width="600" height="6" />
+      <rect x="170" y="110" width="380" height="270" rx="4" fill="none" strokeWidth="3" />
+      {Array.from({ length: 18 }).map((_, i) => (
+        <rect key={i} x={180 + i * 21} y="118" width="10" height="254" rx="2" />
+      ))}
+      <circle cx="220" cy="400" r="14" />
+      <circle cx="500" cy="400" r="14" />
+      <path d="M70,250 l50,-20 l0,12 l60,0 l0,16 l-60,0 l0,12 z" />
+    </svg>
+  );
+}
+
+function SwingGateArt() {
+  return (
+    <svg viewBox="0 0 600 480" preserveAspectRatio="xMaxYMid slice" className="mk-svc-art-svg" aria-hidden="true">
+      <rect x="40" y="80" width="20" height="340" rx="3" />
+      <rect x="540" y="80" width="20" height="340" rx="3" />
+      <path d="M40,80 l10,-20 l10,20 z" />
+      <path d="M540,80 l10,-20 l10,20 z" />
+      <g transform="rotate(-12 60 250)">
+        <rect x="60" y="120" width="240" height="260" rx="3" fill="none" strokeWidth="3" />
+        {Array.from({ length: 11 }).map((_, i) => (
+          <rect key={`l${i}`} x={70 + i * 22} y="128" width="10" height="244" rx="2" />
+        ))}
+      </g>
+      <g transform="rotate(12 540 250)">
+        <rect x="300" y="120" width="240" height="260" rx="3" fill="none" strokeWidth="3" />
+        {Array.from({ length: 11 }).map((_, i) => (
+          <rect key={`r${i}`} x={310 + i * 22} y="128" width="10" height="244" rx="2" />
+        ))}
+      </g>
+      <line x1="20" y1="420" x2="580" y2="420" strokeOpacity="0.4" />
+    </svg>
+  );
+}
+
+function AutomationArt() {
+  return (
+    <svg viewBox="0 0 600 480" preserveAspectRatio="xMaxYMid slice" className="mk-svc-art-svg" aria-hidden="true">
+      <rect x="180" y="120" width="320" height="260" rx="4" fill="none" strokeWidth="3" />
+      {Array.from({ length: 14 }).map((_, i) => (
+        <rect key={i} x={190 + i * 22} y="128" width="10" height="244" rx="2" />
+      ))}
+      <rect x="60" y="270" width="100" height="110" rx="6" fill="none" strokeWidth="3" />
+      <rect x="80" y="295" width="60" height="14" rx="2" />
+      <circle cx="110" cy="345" r="14" fill="none" strokeWidth="2" />
+      <path d="M160,330 q40,-20 70,0" fill="none" strokeWidth="2" />
+      <line x1="40" y1="400" x2="560" y2="400" strokeOpacity="0.4" />
+      <path d="M500,90 q12,-12 24,0" fill="none" strokeWidth="2.4" />
+      <path d="M488,82 q24,-24 48,0" fill="none" strokeWidth="2.4" />
+      <path d="M476,74 q36,-36 72,0" fill="none" strokeWidth="2.4" />
+      <rect x="500" y="120" width="40" height="60" rx="6" fill="none" strokeWidth="2.4" />
+      <circle cx="520" cy="160" r="4" />
+    </svg>
+  );
+}
+
+const MK_SERVICES = [
   {
-    icon: Grid3x3,
     title: "Táblás kerítés",
-    desc: "Modern, igényes 3D-s táblás kerítésrendszer. Tartós, alacsony karbantartású, esztétikus megoldás — otthonhoz és telephelyhez egyaránt.",
-    tags: ["Horganyzott", "3D panel", "Festett bevonat"],
-    num: "01",
-    dark: true,
+    desc:  "Modern, igényes 3D-s táblás kerítésrendszer. Tartós, alacsony karbantartású, esztétikus megoldás — otthonhoz és telephelyhez egyaránt.",
+    tags:  ["Horganyzott", "3D panel", "Festett bevonat"],
+    Art:   PanelArt,
+    accent: "#E8930C",
   },
   {
-    icon: Fence,
     title: "Drótfonatos kerítés",
-    desc: "Költséghatékony, gyors kivitelezésű drótfonatos kerítés. Telekhatárok lezárására, kertek és nagyobb területek bekerítésére.",
-    tags: ["Gyors kivitel", "Gazdaságos", "Nagy területre"],
-    num: "02",
-    dark: false,
+    desc:  "Költséghatékony, gyors kivitelezésű drótfonatos kerítés. Telekhatárok lezárására, kertek és nagyobb területek bekerítésére.",
+    tags:  ["Gyors kivitel", "Gazdaságos", "Nagy területre"],
+    Art:   MeshArt,
+    accent: "#F5A623",
   },
   {
-    icon: Hammer,
     title: "Kovácsoltvas kerítés",
-    desc: "Egyedi tervezésű, kézzel készített kovácsoltvas kerítések és kapuk — időtálló elegancia, amely megemeli az ingatlan értékét.",
-    tags: ["Egyedi terv", "Kézzel készült", "Prémium"],
-    num: "03",
-    dark: true,
+    desc:  "Egyedi tervezésű, kézzel készített kovácsoltvas kerítések és kapuk — időtálló elegancia, amely megemeli az ingatlan értékét.",
+    tags:  ["Egyedi terv", "Kézzel készült", "Prémium"],
+    Art:   IronArt,
+    accent: "#E8930C",
   },
   {
-    icon: DoorOpen,
     title: "Csúszókapu",
-    desc: "Helytakarékos, sínen futó vagy önhordó csúszókapuk. Tökéletes választás szűkös beállóknál és lejtős terepen is.",
-    tags: ["Sínes", "Önhordó", "Automata opció"],
-    num: "04",
-    dark: false,
+    desc:  "Helytakarékos, sínen futó vagy önhordó csúszókapuk. Tökéletes választás szűkös beállóknál és lejtős terepen is.",
+    tags:  ["Sínes", "Önhordó", "Automata opció"],
+    Art:   SlidingGateArt,
+    accent: "#F5A623",
   },
   {
-    icon: Ruler,
     title: "Nyílókapu",
-    desc: "Egy- és kétszárnyú nyílókapuk minden méretben. Stabil szerkezet, precíz illesztés, hosszú élettartam garantálva.",
-    tags: ["1 szárnyú", "2 szárnyú", "Egyedi méret"],
-    num: "05",
-    dark: true,
+    desc:  "Egy- és kétszárnyú nyílókapuk minden méretben. Stabil szerkezet, precíz illesztés, hosszú élettartam garantálva.",
+    tags:  ["1 szárnyú", "2 szárnyú", "Egyedi méret"],
+    Art:   SwingGateArt,
+    accent: "#E8930C",
   },
   {
-    icon: Cpu,
     title: "Kapuautomatika",
-    desc: "Motorizált kapunyitás távirányítóval, kódzárral vagy okostelefonról. Kényelmes és biztonságos megoldás meglévő kapukhoz is.",
-    tags: ["Távirányító", "Okostelefon", "Meglévő kapuhoz"],
-    num: "06",
-    dark: false,
+    desc:  "Motorizált kapunyitás távirányítóval, kódzárral vagy okostelefonról. Kényelmes és biztonságos megoldás meglévő kapukhoz is.",
+    tags:  ["Távirányító", "Okostelefon", "Meglévő kapuhoz"],
+    Art:   AutomationArt,
+    accent: "#F5A623",
   },
 ];
 
-const CARD_OFFSET = 22; // px per card
-const STICKY_TOP = 72;  // header height
+const MK_CARD_OFFSET = 22;
+const MK_STICKY_TOP  = 88;
 
 export default function Services() {
   return (
-    <section id="szolgaltatasok" className="relative bg-stone-50">
-      {/* Header */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24 pb-14">
-        <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-200 text-steel text-xs font-semibold uppercase tracking-wide mb-4">
-            Szolgáltatások
-          </div>
-          <h2 className="display text-4xl md:text-5xl text-ink leading-tight">
-            Minden, ami kerítés és kapu — egy kézből
-          </h2>
-          <p className="mt-4 text-lg text-steel">
-            Az anyagbeszerzéstől a kulcsrakész átadásig. Felmérjük a terepet,
-            megtervezzük a megoldást, és precízen kivitelezzük.
-          </p>
-        </div>
+    <section id="szolgaltatasok" className="mk-services">
+      <div className="mk-container mk-services-header">
+        <span className="eyebrow eyebrow--stone">Szolgáltatások</span>
+        <h2 className="display mk-h2">Minden, ami kerítés és kapu — egy kézből</h2>
+        <p className="lead">
+          Az anyagbeszerzéstől a kulcsrakész átadásig. Felmérjük a terepet, megtervezzük a megoldást,
+          és precízen kivitelezzük.
+        </p>
       </div>
 
-      {/* Stacking cards */}
-      <div className="pb-40">
-        {services.map((s, i) => (
-          <div
-            key={s.title}
-            className="sticky mx-3 sm:mx-5 lg:mx-8 mb-3 rounded-2xl lg:rounded-3xl overflow-hidden shadow-xl"
-            style={{ top: `${STICKY_TOP + i * CARD_OFFSET}px`, zIndex: 10 + i }}
-          >
-            <div
-              className={`relative flex flex-col lg:flex-row min-h-[340px] lg:min-h-[300px] ${
-                s.dark
-                  ? "bg-stone-900 text-white"
-                  : "bg-white text-ink border border-line"
-              }`}
-            >
-              {/* Big number watermark */}
+      <div className="mk-container">
+        <div className="mk-services-stack">
+          {MK_SERVICES.map((s, i) => {
+            const Art = s.Art;
+            return (
               <div
-                className={`absolute top-4 right-6 display text-7xl lg:text-8xl font-bold leading-none select-none pointer-events-none ${
-                  s.dark ? "text-white/[0.06]" : "text-ink/[0.05]"
-                }`}
+                key={s.title}
+                className="mk-svc-card"
+                style={{
+                  top: `${MK_STICKY_TOP + i * MK_CARD_OFFSET}px`,
+                  zIndex: 10 + i,
+                  ["--card-accent" as string]: s.accent,
+                }}
               >
-                {s.num}
-              </div>
-
-              {/* Content */}
-              <div className="relative z-10 flex flex-col justify-between p-7 lg:p-12 lg:w-3/5">
-                <div>
-                  <div
-                    className={`w-13 h-13 rounded-2xl flex items-center justify-center mb-5 ${
-                      s.dark ? "bg-white/10" : "amber-gradient"
-                    }`}
-                    style={{ width: 52, height: 52 }}
-                  >
-                    <s.icon
-                      className={`w-6 h-6 ${s.dark ? "text-amber" : "text-ink"}`}
-                      strokeWidth={1.7}
-                    />
+                <div className="mk-svc-art">
+                  <Art />
+                </div>
+                <div className="mk-svc-content">
+                  <h3 className="mk-svc-title">{s.title}</h3>
+                  <p className="mk-svc-desc">{s.desc}</p>
+                  <div className="mk-svc-tags">
+                    {s.tags.map(t => <span key={t} className="mk-tag">{t}</span>)}
                   </div>
-                  <h3 className="display text-2xl lg:text-3xl leading-tight">
-                    {s.title}
-                  </h3>
-                  <p
-                    className={`mt-3 text-sm lg:text-base leading-relaxed max-w-lg ${
-                      s.dark ? "text-stone-400" : "text-steel"
-                    }`}
-                  >
-                    {s.desc}
-                  </p>
-                </div>
-
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {s.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className={`text-xs font-medium px-3 py-1.5 rounded-full tracking-wide ${
-                        s.dark
-                          ? "bg-white/10 text-stone-300"
-                          : "bg-stone-100 text-steel"
-                      }`}
-                    >
-                      {tag}
-                    </span>
-                  ))}
                 </div>
               </div>
-
-              {/* Right accent panel */}
-              <div
-                className={`hidden lg:flex lg:w-2/5 items-center justify-center ${
-                  s.dark ? "bg-white/[0.03]" : "bg-stone-50"
-                }`}
-              >
-                <div
-                  className={`w-36 h-36 rounded-3xl flex items-center justify-center ${
-                    s.dark ? "amber-gradient" : "bg-stone-900"
-                  }`}
-                >
-                  <s.icon
-                    className={`w-16 h-16 ${s.dark ? "text-ink" : "text-amber"}`}
-                    strokeWidth={1}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Bottom CTA */}
-      <div className="mx-3 sm:mx-5 lg:mx-8 -mt-24 relative z-50 mb-0">
-        <div className="flex items-center justify-between flex-wrap gap-4 p-6 lg:p-8 rounded-2xl bg-stone-900 text-white shadow-2xl">
-          <div>
-            <div className="display text-xl">Nem találja, amit keres?</div>
-            <div className="text-sm text-stone-400 mt-1">
-              Egyedi igényekre is vállalunk kivitelezést — kérjen ajánlatot.
-            </div>
-          </div>
-          <a
-            href="#kalkulator"
-            className="inline-flex items-center gap-2 amber-gradient text-ink px-6 py-3 rounded-lg text-sm font-semibold whitespace-nowrap"
-          >
-            Árkalkuláció
-          </a>
+            );
+          })}
         </div>
       </div>
     </section>

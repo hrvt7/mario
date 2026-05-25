@@ -37,8 +37,8 @@ export default function Header() {
               <span className="display text-xl text-ink leading-none">M</span>
             </div>
             <div className="leading-none">
-              <div className="display text-2xl text-ink tracking-tight">MÁRIÓ</div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-steel font-medium mt-0.5">
+              <div className={`display text-2xl tracking-tight transition-colors ${scrolled || open ? "text-ink" : "text-white"}`}>MÁRIÓ</div>
+              <div className={`text-[10px] uppercase tracking-[0.2em] font-medium mt-0.5 transition-colors ${scrolled || open ? "text-steel" : "text-white/60"}`}>
                 Kerítés &amp; Kapu
               </div>
             </div>
@@ -49,14 +49,18 @@ export default function Header() {
               <a
                 key={n.href}
                 href={n.href}
-                className="text-sm font-medium text-steel hover:text-ink transition-colors"
+                className={`text-sm font-medium transition-colors ${scrolled || open ? "text-steel hover:text-ink" : "text-white/70 hover:text-white"}`}
               >
                 {n.label}
               </a>
             ))}
             <a
               href="tel:+36300000000"
-              className="inline-flex items-center gap-2 bg-ink text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-amber hover:text-ink transition-colors"
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                scrolled || open
+                  ? "bg-ink text-white hover:bg-amber hover:text-ink"
+                  : "border border-white/30 text-white hover:border-white/60"
+              }`}
             >
               <Phone className="w-4 h-4" />
               +36 30 000 0000
@@ -65,7 +69,7 @@ export default function Header() {
 
           <button
             onClick={() => setOpen(!open)}
-            className="lg:hidden p-2 text-ink"
+            className={`lg:hidden p-2 transition-colors ${scrolled || open ? "text-ink" : "text-white"}`}
             aria-label="Menü"
           >
             {open ? <X className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}

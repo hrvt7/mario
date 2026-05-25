@@ -1,90 +1,167 @@
-import { Calculator, Phone, ShieldCheck, Clock, Award } from "lucide-react";
+"use client";
+
+import { useEffect, useRef } from "react";
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const fenceLeftRef = useRef<HTMLDivElement>(null);
+  const fenceRightRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Mouse spotlight
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const onMove = (e: MouseEvent) => {
+      const r = el.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      el.style.setProperty("--mx", x + "%");
+      el.style.setProperty("--my", y + "%");
+    };
+    el.addEventListener("mousemove", onMove);
+    return () => el.removeEventListener("mousemove", onMove);
+  }, []);
+
+  // Fence-pull scroll effect
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const el = sectionRef.current;
+        if (!el) return;
+        const h = el.offsetHeight || window.innerHeight;
+        const y = window.scrollY || 0;
+        const p = Math.max(0, Math.min(1, y / h));
+
+        if (fenceLeftRef.current) {
+          fenceLeftRef.current.style.transform = `translateX(${-p * 110}%)`;
+          fenceLeftRef.current.style.opacity = String(1 - p * 0.6);
+        }
+        if (fenceRightRef.current) {
+          fenceRightRef.current.style.transform = `translateX(${p * 110}%)`;
+          fenceRightRef.current.style.opacity = String(1 - p * 0.6);
+        }
+        if (contentRef.current) {
+          contentRef.current.style.transform = `translateY(${-p * 40}px)`;
+          contentRef.current.style.opacity = String(1 - p * 0.35);
+        }
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
-    <section className="relative overflow-hidden bg-stone-50 min-h-screen flex items-center">
-      <div className="absolute inset-0 grid-texture opacity-60" />
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-stone-200/50 to-transparent" />
+    <section className="v2-hero" ref={sectionRef}>
+      <div className="v2-hero-spot" />
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-20 md:pt-40 md:pb-28 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="fade-up">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber/15 text-amber-dark text-xs font-semibold uppercase tracking-wide mb-6">
-              <Award className="w-3.5 h-3.5" />
-              15+ év szakmai tapasztalat
-            </div>
+      {/* Fence panels — slide apart on scroll */}
+      <div className="v2-hero-fence v2-hero-fence--left" ref={fenceLeftRef} aria-hidden="true">
+        <FencePanel />
+      </div>
+      <div className="v2-hero-fence v2-hero-fence--right" ref={fenceRightRef} aria-hidden="true">
+        <FencePanel flipped />
+      </div>
 
-            <h1 className="display text-5xl sm:text-6xl lg:text-7xl text-ink leading-[1.02]">
-              Kerítés és kapu,
-              <span className="block mt-1">
-                amire <span className="text-amber-dark">évtizedekig</span>
-              </span>
-              <span className="block mt-1">számíthat.</span>
-            </h1>
+      <div className="mk-container v2-hero-inner" ref={contentRef}>
+        <h1 className="v2-hero-h1">
+          Kerítés <span className="accent">és</span> kapu,
+          <br />
+          amire <span className="accent">évtizedekig</span>
+          <br />
+          <span className="stroke">számíthat.</span>
+        </h1>
 
-            <p className="mt-6 text-lg text-steel max-w-xl leading-relaxed">
-              Táblás, drótfonatos és kovácsoltvas kerítések, csúszó- és
-              nyílókapuk profi kivitelezésben. Pontos munka, korrekt ár,
-              határidőre — kulcsrakész megoldással.
+        <div className="v2-hero-bottom">
+          <div>
+            <p className="v2-hero-lead">
+              <strong>Táblás, drótfonatos és kovácsoltvas</strong> kerítések,
+              <strong> csúszó- és nyílókapuk</strong> profi kivitelezésben.
+              Pontos munka, korrekt ár, határidőre — kulcsrakész megoldással.
             </p>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="#kalkulator"
-                className="inline-flex items-center gap-2 amber-gradient text-ink px-7 py-4 rounded-lg text-base font-semibold shadow-lg shadow-amber/30 hover:scale-[1.02] transition-transform"
-              >
-                <Calculator className="w-5 h-5" />
+            <div className="v2-hero-ctas">
+              <a href="#kalkulator" className="v2-btn v2-btn-primary">
                 Árkalkuláció indítása
+                <svg className="arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
               </a>
-              <a
-                href="tel:+36300000000"
-                className="inline-flex items-center gap-2 bg-white border border-line text-ink px-7 py-4 rounded-lg text-base font-semibold hover:border-ink transition-colors"
-              >
-                <Phone className="w-5 h-5" />
-                Hívjon most
+              <a href="tel:+36300000000" className="v2-btn v2-btn-ghost">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.86 19.86 0 0 1 2.08 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8 10a16 16 0 0 0 6 6l1.36-1.36a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z" />
+                </svg>
+                +36 30 000 0000
               </a>
-            </div>
-
-            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-steel">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-amber-dark" />
-                Garanciával
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-amber-dark" />
-                Pontos határidő
-              </div>
-              <div className="flex items-center gap-2">
-                <Award className="w-4 h-4 text-amber-dark" />
-                Ingyenes felmérés
-              </div>
             </div>
           </div>
 
-          <div className="relative fade-up" style={{ animationDelay: "0.15s" }}>
-            <div className="relative aspect-[4/5] max-w-md mx-auto rounded-2xl overflow-hidden shadow-2xl">
-              <img
-                src="https://images.unsplash.com/photo-1558036117-15d82a90b9b1?q=80&w=1200&auto=format&fit=crop"
-                alt="Modern kerítés és kapu kivitelezés"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
-            </div>
-            <div className="absolute -bottom-5 -left-5 bg-white rounded-xl shadow-xl border border-line px-5 py-4">
-              <div className="display text-3xl text-ink">500+</div>
-              <div className="text-xs text-steel font-medium mt-0.5">
-                Elkészült projekt
-              </div>
-            </div>
-            <div className="absolute -top-5 -right-5 amber-gradient rounded-xl shadow-xl px-5 py-4">
-              <div className="display text-3xl text-ink">5 év</div>
-              <div className="text-xs text-ink/80 font-medium mt-0.5">
-                Garancia
-              </div>
-            </div>
+          <div className="v2-hero-stats">
+            <Stat value="15"  suffix="+"   label="Év tapasztalat" />
+            <Stat value="500" suffix="+"   label="Elkészült projekt" />
+            <Stat value="5"   suffix=" év" label="Garancia" />
           </div>
         </div>
       </div>
+
+      {/* Marquee */}
+      <div className="v2-marquee">
+        <div className="v2-marquee-track">
+          <span>
+            Táblás kerítés <em className="v2-marquee-dot">●</em>
+            Drótfonatos kerítés <em className="v2-marquee-dot">●</em>
+            Kovácsoltvas kerítés <em className="v2-marquee-dot">●</em>
+            Csúszókapu <em className="v2-marquee-dot">●</em>
+            Nyílókapu <em className="v2-marquee-dot">●</em>
+            Kapuautomatika <em className="v2-marquee-dot">●</em>
+          </span>
+          <span aria-hidden="true">
+            Táblás kerítés <em className="v2-marquee-dot">●</em>
+            Drótfonatos kerítés <em className="v2-marquee-dot">●</em>
+            Kovácsoltvas kerítés <em className="v2-marquee-dot">●</em>
+            Csúszókapu <em className="v2-marquee-dot">●</em>
+            Nyílókapu <em className="v2-marquee-dot">●</em>
+            Kapuautomatika <em className="v2-marquee-dot">●</em>
+          </span>
+        </div>
+      </div>
     </section>
+  );
+}
+
+function Stat({ value, suffix, label }: { value: string; suffix: string; label: string }) {
+  return (
+    <div className="v2-stat">
+      <div className="v2-stat-num">{value}<span className="v2-stat-suffix">{suffix}</span></div>
+      <div className="v2-stat-lbl">{label}</div>
+    </div>
+  );
+}
+
+function FencePanel({ flipped }: { flipped?: boolean }) {
+  const bars = [];
+  for (let i = 0; i < 16; i++) {
+    bars.push(<rect key={i} x={i * 80 + 36} y={20} width={12} height={760} rx={3} />);
+  }
+  return (
+    <svg
+      viewBox="0 0 1280 800"
+      preserveAspectRatio="xMidYMax slice"
+      className={`v2-fence-svg${flipped ? " is-flipped" : ""}`}
+      role="presentation"
+    >
+      {/* Top rail */}
+      <rect x={0} y={60} width={1280} height={10} rx={2} />
+      {/* Vertical bars */}
+      {bars}
+      {/* Bottom rail */}
+      <rect x={0} y={730} width={1280} height={14} rx={2} />
+    </svg>
   );
 }
