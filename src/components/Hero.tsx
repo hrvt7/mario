@@ -156,12 +156,12 @@ function FencePanel({ flipped }: { flipped?: boolean }) {
       className={`v2-fence-svg${flipped ? " is-flipped" : ""}`}
       role="presentation"
     >
-      {/* Top rail */}
-      <rect x={0} y={60} width={1280} height={10} rx={2} />
-      {/* Vertical bars */}
+      {/* Top rail — amber tint */}
+      <rect x={0} y={60} width={1280} height={10} rx={2} fill="rgba(232,147,12,0.28)" />
+      {/* Vertical bars — inherit CSS fill */}
       {bars}
-      {/* Bottom rail */}
-      <rect x={0} y={730} width={1280} height={14} rx={2} />
+      {/* Bottom rail — amber tint */}
+      <rect x={0} y={730} width={1280} height={14} rx={2} fill="rgba(232,147,12,0.28)" />
     </svg>
   );
 }

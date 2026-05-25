@@ -176,9 +176,9 @@ html {
 .v2-fence-svg {
   width: 100%;
   height: 100%;
-  fill: rgba(255,255,255,0.07);
-  stroke: rgba(232,147,12,0.18);
-  stroke-width: 1;
+  fill: rgba(255,255,255,0.09);
+  stroke: none;
+  shape-rendering: crispEdges;
 }
 .v2-fence-svg.is-flipped { transform: scaleX(-1); }
 
@@ -538,84 +538,92 @@ html {
 .v2-range-wrap {
   position: relative;
   height: 48px;
-  display: flex;
-  align-items: center;
 }
 .v2-fence-rail {
   position: absolute;
   left: 0;
   right: 0;
-  height: 3px;
-  background: rgba(0,0,0,0.10);
+  height: 2px;
+  background: rgba(0,0,0,0.12);
   border-radius: 2px;
-  z-index: 0;
+  pointer-events: none;
 }
-.v2-fence-rail--top { top: 10px; }
-.v2-fence-rail--bot { bottom: 10px; }
+.v2-fence-rail--top { top: 9px; }
+.v2-fence-rail--bot { bottom: 9px; }
 
 .v2-fence-pickets-bg,
 .v2-fence-pickets-fill {
   position: absolute;
-  top: 6px;
-  bottom: 6px;
+  top: 11px;
+  bottom: 11px;
   left: 0;
-  border-radius: 3px;
+  border-radius: 2px;
+  pointer-events: none;
   background-image: repeating-linear-gradient(
     to right,
     rgba(0,0,0,0.08) 0px,
     rgba(0,0,0,0.08) 3px,
     transparent 3px,
-    transparent 11px
+    transparent 12px
   );
 }
 .v2-fence-pickets-bg { right: 0; }
 .v2-fence-pickets-fill {
+  right: auto;
   background-image: repeating-linear-gradient(
     to right,
     var(--color-amber) 0px,
     var(--color-amber) 3px,
     transparent 3px,
-    transparent 11px
+    transparent 12px
   );
   z-index: 1;
-  transition: width 0.05s;
+  transition: width 0.04s linear;
 }
 
+/* Range input — explicit px height so WebKit thumb margin-top formula works:
+   wrapper=48px, thumb=36px → margin-top=(48−36)/2=6px */
 .v2-range {
   position: absolute;
-  inset: 0;
+  left: 0;
+  right: 0;
+  top: 0;
   width: 100%;
-  height: 100%;
-  cursor: pointer;
-  z-index: 2;
+  height: 48px;
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
+  cursor: pointer;
+  z-index: 10;
+  margin: 0;
+  padding: 0;
 }
 .v2-range:focus { outline: none; }
 .v2-range::-webkit-slider-runnable-track {
+  height: 48px;
   background: transparent;
-  height: 100%;
 }
 .v2-range::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 14px;
-  height: 40px;
-  border-radius: 3px;
-  background: linear-gradient(180deg, #292524 0%, #18181b 100%);
+  width: 16px;
+  height: 36px;
+  margin-top: 6px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #2c2826 0%, #1c1917 100%);
   border: 2px solid var(--color-amber);
-  box-shadow: 0 0 0 3px rgba(232,147,12,0.20), 0 6px 16px rgba(0,0,0,0.40);
+  box-shadow: 0 0 0 3px rgba(232,147,12,0.22), 0 4px 12px rgba(0,0,0,0.50);
   cursor: grab;
-  margin-top: -18px;
 }
-.v2-range::-moz-range-track { background: transparent; }
+.v2-range::-webkit-slider-thumb:active { cursor: grabbing; }
+.v2-range::-moz-range-track { background: transparent; height: 48px; }
 .v2-range::-moz-range-thumb {
-  width: 14px;
-  height: 40px;
-  border-radius: 3px;
-  background: linear-gradient(180deg, #292524 0%, #18181b 100%);
+  -moz-appearance: none;
+  width: 16px;
+  height: 36px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #2c2826 0%, #1c1917 100%);
   border: 2px solid var(--color-amber);
-  box-shadow: 0 0 0 3px rgba(232,147,12,0.20);
+  box-shadow: 0 0 0 3px rgba(232,147,12,0.22);
   cursor: grab;
 }
 
